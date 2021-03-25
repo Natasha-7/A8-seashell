@@ -30,7 +30,39 @@ struct biggie {
 /////////////////////////////////////////////////////////////////////////////
 
 struct biggie *biggie_create(const char *s) {
-  return NULL; // dummy value
+  struct biggie *big = malloc(sizeof(struct biggie));
+  int len = strlen(s);
+  if(s[0] == '-' && s[1] == '0'){
+    return NULL;
+  }
+  if(len == 0){
+    return NULL;
+  }
+  if(s[0] == '0' && len != 1){
+    return NULL;
+  }
+  if(s[0] == '-'){
+    big->negative = true;
+  }else{
+    big->negative = false;
+  }
+  big->digits = malloc((len + 1) * sizeof(char));
+  int i = len - 1;
+  int j = 0;
+  while(i>=0 &&  s[i] >= 48 && s[i]<= 57){
+    big->digits[j] = s[i];
+    j++;
+    i--;
+  }
+  if(i == 0 && s[i] != '-'){
+    return NULL;
+  }else if(i !=0 || i != -1){
+    return NULL;
+  }else {
+  }
+  big->digits[j] = '\0';// maybe
+  return big;
+//WHAT I DID..........IT MIGHT NOT BE CORRECT BUT YAAAAAAAAAA!!
 }
 
 void biggie_destroy(struct biggie *big) {
