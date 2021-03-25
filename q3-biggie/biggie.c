@@ -40,6 +40,62 @@ void biggie_print(const struct biggie *big, bool newline) {
 }
 
 void biggie_add(struct biggie *n, const struct biggie *m) {
+ int lenn = strlen(n->digits);
+  int lenm = strlen(m->digits);
+  int max_length = lenn > lenm ? lenn : lenm;
+  int carry = 0;
+  int sum = 0;
+  int digit;
+  int borrow = 0;
+  int calc = 0;
+  int subfrom = 0;
+  if(n->negative == false && m->negative == true){
+    for (int i = 0; i<max_length; i++){
+      int sub1 = n->digits[i] - '0';
+      int sub2 = m->digits[i] - '0';
+      subfrom = sub1 - borrow;
+      calc = subfrom - sub2;
+      if(calc < 0){
+        subfrom = 10 + subfrom;
+        calc = subfrom - sub2;
+        borrow = 1;
+      }
+      n->digits[i] =calc + '0';
+
+
+    }
+  }
+
+  else if(n->negative == true && m->negative == false){
+    n->negative = false;
+    biggie_sub(n, m);
+    n->negative = true;
+
+  }else{
+    if (max_length > lenn) n->digits = realloc(n->digits, max_length * sizeof(char *));
+
+    for ( int i = 0 ; i < max_length ; i++) {
+      if ( lenn >= i && lenm >= i)
+        sum = (n->digits[i] - '0') + (m->digits[i] - '0');
+      else if (lenm >= i) 
+        sum = m->digits[i] - '0';
+      else
+        sum = n->digits[i] - '0';
+      sum = sum + carry;
+      digit = sum % 10;
+      carry = ( sum - carry ) / 10;
+      n->digits[i] = digit + '0';
+    }
+
+    if (carry > 0) {
+      n->digits[max_length] = carry + '0';
+      n->digits= realloc(n->digits, (max_length + 2) * sizeof(char));
+      n->digits[max_length] = '1';
+      n->digits[max_length + 1] = '\0';
+    }
+
+  }
+}
 }
 
 void biggie_sub(struct biggie *n, const struct biggie *m) {
