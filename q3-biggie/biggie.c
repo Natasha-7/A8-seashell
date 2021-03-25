@@ -43,6 +43,43 @@ void biggie_add(struct biggie *n, const struct biggie *m) {
 }
 
 void biggie_sub(struct biggie *n, const struct biggie *m) {
+ void biggie_sub(struct biggie *n, const struct biggie *m) {
+  int len1= strlen(n->digits);
+  int len2= strlen(m->digits);
+  int max_length = max(len1, len2);
+  int sub1 = 0;
+  int sub2 = 0;
+  int subfrom = 0;
+  int borrow = 0;
+  int calc = 0;
+  if(n->negative == true && m->negative == false){
+    n->negative = false;
+    biggie_add(n, m);
+   n->negative = true;
+    
+  }else if(n->negative == false && m->negative == true){
+    struct biggie *big;
+    big = biggie_copy(m);
+    big->negative = false;
+    
+    biggie_add(n , big);
+  }
+
+  for (int i = 0; i<max_length; i++){
+    sub1 = n->digits[i] - '0';
+    sub2 = m->digits[i] - '0';
+    subfrom = sub1 - borrow;
+    calc = subfrom - sub2;
+    if(calc < 0){
+      subfrom = 10 + subfrom;
+      calc = subfrom - sub2;
+      borrow = 1;
+    }
+    n->digits[i] =calc + '0';
+
+
+  }
+}
 }
 
 void biggie_mult(struct biggie *n, const struct biggie *m) {
